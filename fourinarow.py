@@ -129,13 +129,26 @@ def runGame(isFirstGame):
 
 
 def makeMove(board, player, column):
+    """
+    This function is a helper function used by the computer to generate possible moves
+    -JS
+    """
     lowest = getLowestEmptySpace(board, column)
+    #if the lowest row in a given column is open on the board, assign that space to the input player (usually the computer) - JS
     if lowest != -1:
-        board[column][lowest] = player
+        board[column][lowest] = player 
 
 
 def drawBoard(board, extraToken=None):
-    DISPLAYSURF.fill(BGCOLOR)
+    """
+    This function draws the board state for the game.
+    Inputs : a board (list) and an optional extra token (dictionary) defining the parameters of the token
+    extraToken defaults to None as that is only used when animating the token drops on the board
+    -JS
+    """
+    #Fills the background of the display surface with the predefined color - JS
+    #Note: Color can be changed in the variable initialized at the top of the file - JS
+    DISPLAYSURF.fill(BGCOLOR) 
 
     # draw tokens
     spaceRect = pygame.Rect(0, 0, SPACESIZE, SPACESIZE)
@@ -166,6 +179,10 @@ def drawBoard(board, extraToken=None):
 
 
 def getNewBoard():
+    """
+    This function generates an empty board data structure (list of lists) with the predefined width and height.
+    -JS
+    """
     board = []
     for x in range(BOARDWIDTH):
         board.append([EMPTY] * BOARDHEIGHT)
@@ -253,6 +270,7 @@ def animateComputerMoving(board, column):
     # dropping the black tile
     animateDroppingToken(board, column, BLACK)
 
+#note: next section starts here - JS
 
 def getComputerMove(board):
     potentialMoves = getPotentialMoves(board, BLACK, DIFFICULTY)
