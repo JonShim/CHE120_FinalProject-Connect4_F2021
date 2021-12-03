@@ -224,6 +224,7 @@ def getHumanMove(board, isFirstMove):
                     # let go at the top of the screen.
                     column = int((tokenx - XMARGIN) / SPACESIZE) #determines which column to drop the token on based on the area on the display where it is released -JS
                     if isValidMove(board, column):
+                        #if the move is valid, animate the token drop, update the board data structure, and draw the updated board -JS
                         animateDroppingToken(board, column, RED)
                         board[column][getLowestEmptySpace(board, column)] = RED
                         drawBoard(board)
@@ -233,14 +234,16 @@ def getHumanMove(board, isFirstMove):
                 tokenx, tokeny = None, None
                 draggingToken = False
         if tokenx != None and tokeny != None:
+            #draw the red player token at its specified x and y coordinates -JS
             drawBoard(board, {'x':tokenx - int(SPACESIZE / 2), 'y':tokeny - int(SPACESIZE / 2), 'color':RED})
         else:
+            #no animation if the token is not being moved -JS
             drawBoard(board)
 
         if isFirstMove:
             # Show the help arrow for the player's first move.
             DISPLAYSURF.blit(ARROWIMG, ARROWRECT)
-
+        #update the display to show the token's movement as often as the fps variable allows -JS
         pygame.display.update()
         FPSCLOCK.tick()
 
@@ -252,21 +255,25 @@ def animateDroppingToken(board, column, color):
     Output: an animation for a token of the input color dropping in the input column down to the lowest available space in the column.
     -JS
     """
-    #initialize the coordinates where the dropping animation begins (effectively centers it on the desired column), and the initial velocity of the token. - JS
+    #initialize the coordinates where the dropping animation begins (effectively centers it on the desired column), and the initial velocity of the token. -JS
     x = XMARGIN + column * SPACESIZE
     y = YMARGIN - SPACESIZE
     dropSpeed = 1.0
-
+    
     lowestEmptySpace = getLowestEmptySpace(board, column)
 
     while True:
         y += int(dropSpeed)
         dropSpeed += 0.5 #token accelerates -JS
         if int((y - YMARGIN) / SPACESIZE) >= lowestEmptySpace:
+            #when the y-coordinate of the falling token becomes greater or equal to the value of the lowest empty board space, stop the animation -JS
+            #note: y values increase going from top to bottom -JS
+            # -> stops the drop when it reaches the lowest valid point, breaking the loop with the return -JS
             return
-        drawBoard(board, {'x':x, 'y':y, 'color':color})
-        pygame.display.update()
-        FPSCLOCK.tick()
+        #draw the board with the extra dropping token, and updates as often as the fps variable allows -JS
+        drawBoard(board, {'x':x, 'y':y, 'color':color}) 
+        pygame.display.update() 
+        FPSCLOCK.tick() 
 
 
 def animateComputerMoving(board, column):
