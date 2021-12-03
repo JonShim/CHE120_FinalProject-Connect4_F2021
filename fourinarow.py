@@ -126,7 +126,7 @@ def runGame(isFirstGame):
                 sys.exit()
             elif event.type == MOUSEBUTTONUP:
                 return
-
+#note: next section starts here -JS
 
 def makeMove(board, player, column):
     """
@@ -211,7 +211,7 @@ def getHumanMove(board, isFirstMove):
                 pygame.quit()
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN and not draggingToken and REDPILERECT.collidepoint(event.pos):
-                #checks if the mouse is pressed, token is not currently being dragged, and if the cursor is on the "token stack" for the red tokens -JS
+                #checks if the mouse is pressed, token is not currently being dragged, and if the cursor is on the "token stack" Rect structure for the red tokens -JS
                 # start of dragging on red token pile.
                 draggingToken = True
                 tokenx, tokeny = event.pos #updates the visual of the token on its starting point -JS
@@ -277,26 +277,37 @@ def animateDroppingToken(board, column, color):
 
 
 def animateComputerMoving(board, column):
+    """
+    This function animates the token movement for the computer.
+    Inputs: a board (list) and a column (int)
+    Outputs: an animation for the token moving from the computer's token pile up to the top of the board, across to the desired column, and dropping the token in the desired column
+    -JS
+    """
+    #initialize variables based on the coordinates of the edges of the computer's black token pile Rect structure, as well as the initial speed -JS
     x = BLACKPILERECT.left
     y = BLACKPILERECT.top
     speed = 1.0
+    
     # moving the black tile up
     while y > (YMARGIN - SPACESIZE):
-        y -= int(speed)
-        speed += 0.5
-        drawBoard(board, {'x':x, 'y':y, 'color':BLACK})
+        y -= int(speed) #move upwards -JS
+        speed += 0.5 #acceleration -JS
+        #draw the display with the token moving, update as often as the fps variable allows -JS
+        drawBoard(board, {'x':x, 'y':y, 'color':BLACK}) 
         pygame.display.update()
         FPSCLOCK.tick()
     # moving the black tile over
-    y = YMARGIN - SPACESIZE
-    speed = 1.0
+    y = YMARGIN - SPACESIZE #re-initialize y at the top of the display -JS
+    speed = 1.0 #re-initialize the speed -JS
     while x > (XMARGIN + column * SPACESIZE):
-        x -= int(speed)
-        speed += 0.5
+        x -= int(speed) #move horizontally to the left -JS
+        speed += 0.5 #acceleration -JS
+        #draw the display with the token moving, update as often as the fps variable allows -JS
         drawBoard(board, {'x':x, 'y':y, 'color':BLACK})
         pygame.display.update()
         FPSCLOCK.tick()
     # dropping the black tile
+    #this uses the helper function above -JS
     animateDroppingToken(board, column, BLACK)
 
 #note: next section starts here - JS
