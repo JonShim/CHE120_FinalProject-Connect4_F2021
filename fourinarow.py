@@ -131,6 +131,8 @@ def runGame(isFirstGame):
 def makeMove(board, player, column):
     """
     This function is a helper function used by the computer to generate possible moves
+    Input: a board (list), the current player, and a column (int)
+    Output: A possible update to a value on the input board
     -JS
     """
     lowest = getLowestEmptySpace(board, column)
@@ -143,7 +145,8 @@ def drawBoard(board, extraToken=None):
     """
     This function draws the board state for the game.
     Inputs : a board (list) and an optional extra token (dictionary) defining the parameters of the token
-    extraToken defaults to None as that is only used when animating the token drops on the board
+    extraToken defaults to None as that is only used when animating the token drops on the board.
+    Output: The visuals for the game display.
     -JS
     """
     #Fills the background of the display surface with the predefined color - JS
@@ -181,6 +184,7 @@ def drawBoard(board, extraToken=None):
 def getNewBoard():
     """
     This function generates an empty board data structure (list of lists) with the predefined width and height.
+    Output: An empty board (list).
     -JS
     """
     board = []
@@ -190,17 +194,27 @@ def getNewBoard():
 
 
 def getHumanMove(board, isFirstMove):
+    """
+    This function handles the inputs necessary to get the human player's movement of the tokens, animate the movement, and update the board visual and data structure.
+    This function also shows the help arrow visual for the first human move of the game.
+    Inputs: A board (list), and a boolean.
+    Outputs: Depending on the inputs given, this function can exit the game, display animations for the human player, and update the board visuals.
+    -JS
+    """
+    #initialize these variables: token is not being moved, and its coordinates are thus not on the display. -JS
     draggingToken = False
     tokenx, tokeny = None, None
     while True:
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT:
+                #Exit the game -JS
                 pygame.quit()
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN and not draggingToken and REDPILERECT.collidepoint(event.pos):
+                #checks if the mouse is pressed, token is not currently being dragged, and if the cursor is on the "token stack" for the red tokens -JS
                 # start of dragging on red token pile.
                 draggingToken = True
-                tokenx, tokeny = event.pos
+                tokenx, tokeny = event.pos #updates the visual of the token on its starting point -JS
             elif event.type == MOUSEMOTION and draggingToken:
                 # update the position of the red token being dragged
                 tokenx, tokeny = event.pos
@@ -208,13 +222,14 @@ def getHumanMove(board, isFirstMove):
                 # let go of the token being dragged
                 if tokeny < YMARGIN and tokenx > XMARGIN and tokenx < WINDOWWIDTH - XMARGIN:
                     # let go at the top of the screen.
-                    column = int((tokenx - XMARGIN) / SPACESIZE)
+                    column = int((tokenx - XMARGIN) / SPACESIZE) #determines which column to drop the token on based on the area on the display where it is released -JS
                     if isValidMove(board, column):
                         animateDroppingToken(board, column, RED)
                         board[column][getLowestEmptySpace(board, column)] = RED
                         drawBoard(board)
                         pygame.display.update()
                         return
+                #If the token is let go elsewhere than above the board, or if the move is not a valid move, the token will just reset to its initial state -JS
                 tokenx, tokeny = None, None
                 draggingToken = False
         if tokenx != None and tokeny != None:
@@ -231,6 +246,13 @@ def getHumanMove(board, isFirstMove):
 
 
 def animateDroppingToken(board, column, color):
+    """
+    This function is a helper function used to model the gravitational physics of dropping the tokens onto the board as an animation.
+    Inputs: a board (list), a column number (int), and a color (string, maybe color tuple as well)
+    Output: an animation for a token of the input color dropping in the input column down to the lowest available space in the column.
+    -JS
+    """
+    #initialize the coordinates where the dropping animation begins (effectively centers it on the desired column), and the initial velocity of the token. - JS
     x = XMARGIN + column * SPACESIZE
     y = YMARGIN - SPACESIZE
     dropSpeed = 1.0
@@ -239,7 +261,7 @@ def animateDroppingToken(board, column, color):
 
     while True:
         y += int(dropSpeed)
-        dropSpeed += 0.5
+        dropSpeed += 0.5 #token accelerates -JS
         if int((y - YMARGIN) / SPACESIZE) >= lowestEmptySpace:
             return
         drawBoard(board, {'x':x, 'y':y, 'color':color})
