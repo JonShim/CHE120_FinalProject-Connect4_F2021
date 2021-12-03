@@ -260,7 +260,7 @@ def animateDroppingToken(board, column, color):
     y = YMARGIN - SPACESIZE
     dropSpeed = 1.0
     
-    lowestEmptySpace = getLowestEmptySpace(board, column)
+    lowestEmptySpace = getLowestEmptySpace(board, column) #fetches the lowest available space which the token will be dropped into -JS
 
     while True:
         y += int(dropSpeed)
