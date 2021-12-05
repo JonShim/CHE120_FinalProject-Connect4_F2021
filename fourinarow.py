@@ -314,6 +314,8 @@ def animateComputerMoving(board, column):
 #note: next section starts here - JS
 
 def getComputerMove(board):
+    '''This function excutes the potental moves the computer can make, checks if they are valid moves, checks which moves would be the best, and then
+    randomly checks from the options given. -MC'''
     potentialMoves = getPotentialMoves(board, BLACK, DIFFICULTY)
     # get the best fitness from the potential moves
     bestMoveFitness = -1
@@ -321,14 +323,15 @@ def getComputerMove(board):
         if potentialMoves[i] > bestMoveFitness and isValidMove(board, i):
             bestMoveFitness = potentialMoves[i]
     # find all potential moves that have this best fitness
-    bestMoves = []
-    for i in range(len(potentialMoves)):
+    bestMoves = [] #initializes the best moves list-MC
+    for i in range(len(potentialMoves)):#loop that will repeat for each potential move given-MC
         if potentialMoves[i] == bestMoveFitness and isValidMove(board, i): #checks if each of the potiential moves would be a best move and adds to a list-MC
-            bestMoves.append(i)
+            bestMoves.append(i)#adds each best move to the list during each loop-MC
     return random.choice(bestMoves) #chooses randomly from the list of best moves-MC
 
 
 def getPotentialMoves(board, tile, lookAhead):
+    '''This function gives the potiential moves that the computer can make based on the difficulty and board status-MC'''
     if lookAhead == 0 or isBoardFull(board): #lookahead is the the input of difficulty, so this if statement is if difficulty is 0 or the board is full-MC
         return [0] * BOARDWIDTH #This means no potiential moves-MC
 
@@ -339,10 +342,10 @@ def getPotentialMoves(board, tile, lookAhead):
 
     # Figure out the best move to make.
     potentialMoves = [0] * BOARDWIDTH
-    for firstMove in range(BOARDWIDTH): #Only having the potiential to make a move in the range of thee boardwidth-MC
+    for firstMove in range(BOARDWIDTH): #Only having the potiential to make a move in the range of the boardwidth. Creates a for loop.-MC
         dupeBoard = copy.deepcopy(board) #Copy the board-MC
-        if not isValidMove(dupeBoard, firstMove): #
-            continue
+        if not isValidMove(dupeBoard, firstMove): #If the first move is not valid: -MC
+            continue #calculate other moves-MC
         makeMove(dupeBoard, tile, firstMove)
         if isWinner(dupeBoard, tile):
             # a winning move automatically gets a perfect fitness
@@ -350,75 +353,76 @@ def getPotentialMoves(board, tile, lookAhead):
             break # don't bother calculating other moves
         else:
             # do other player's counter moves and determine best one
-            if isBoardFull(dupeBoard):
+            if isBoardFull(dupeBoard):#if the board is full, potential moves=0 -MC
                 potentialMoves[firstMove] = 0
-            else:
-                for counterMove in range(BOARDWIDTH):
-                    dupeBoard2 = copy.deepcopy(dupeBoard)
-                    if not isValidMove(dupeBoard2, counterMove):
+            else: #If the board is not full -MC
+                for counterMove in range(BOARDWIDTH): #Looks at the possible moves that are in the range of the board width-MC
+                    dupeBoard2 = copy.deepcopy(dupeBoard)#Copy board again-MC
+                    if not isValidMove(dupeBoard2, counterMove): #If the move is not valid, calculate more moves.-MC
                         continue
-                    makeMove(dupeBoard2, enemyTile, counterMove)
+                    makeMove(dupeBoard2, enemyTile, counterMove)#
                     if isWinner(dupeBoard2, enemyTile):
                         # a losing move automatically gets the worst fitness
                         potentialMoves[firstMove] = -1
-                        break
+                        break 
                     else:
                         # do the recursive call to getPotentialMoves()
                         results = getPotentialMoves(dupeBoard2, tile, lookAhead - 1)
                         potentialMoves[firstMove] += (sum(results) / BOARDWIDTH) / BOARDWIDTH
-    return potentialMoves
+    return potentialMoves #Return the moves that can be made-MC
 
 
 def getLowestEmptySpace(board, column):
     # Return the row number of the lowest empty row in the given column.
-    for y in range(BOARDHEIGHT-1, -1, -1):
+    for y in range(BOARDHEIGHT-1, -1, -1):#Checks if there is space to put a move in a colomn as if there is, the column height will have at least 1 empty spot.-MC
         if board[column][y] == EMPTY:
-            return y
-    return -1
+            return y #Return the coloumn that is empty-MC
+    return -1 #The colomn is full-MC
 
 
 def isValidMove(board, column):
+    '''This function checks if a move is valid by seeing if the colomn is in the range of the board or if the colomn is full.-MC'''
     # Returns True if there is an empty space in the given column.
     # Otherwise returns False.
     if column < 0 or column >= (BOARDWIDTH) or board[column][0] != EMPTY:
-        return False
-    return True
+        return False #Move is not valid-MC
+    return True#Move is valid-MC
 
 
 def isBoardFull(board):
     # Returns True if there are no empty spaces anywhere on the board.
-    for x in range(BOARDWIDTH):
-        for y in range(BOARDHEIGHT):
-            if board[x][y] == EMPTY:
-                return False
-    return True
+    for x in range(BOARDWIDTH):#A for loop to check every row-MC
+        for y in range(BOARDHEIGHT):#A for loop to check each space in each row from the previous loop-MC
+            if board[x][y] == EMPTY:#If any spaces are empty, then the board is not full.-MC
+                return False#Board is not full-MC
+    return True#Board is full-MC
 
 
 def isWinner(board, tile):
+    '''This function checks if the computer or human has won the game-MC'''
     # check horizontal spaces
-    for x in range(BOARDWIDTH - 3):
-        for y in range(BOARDHEIGHT):
-            if board[x][y] == tile and board[x+1][y] == tile and board[x+2][y] == tile and board[x+3][y] == tile:
-                return True
+    for x in range(BOARDWIDTH - 3):#Board width is 7, so you need to check a range of 4 (7-3 is 4)-MC
+        for y in range(BOARDHEIGHT):#Needs to be in range of board height as well-MC
+            if board[x][y] == tile and board[x+1][y] == tile and board[x+2][y] == tile and board[x+3][y] == tile:#If there is 4 concecutive same colour tiles in a row by using x value in board width loop-MC
+                return True#There is a winner-MC
     # check vertical spaces
-    for x in range(BOARDWIDTH):
+    for x in range(BOARDWIDTH):#Needs to be in range of board width-MC
         for y in range(BOARDHEIGHT - 3):
-            if board[x][y] == tile and board[x][y+1] == tile and board[x][y+2] == tile and board[x][y+3] == tile:
-                return True
+            if board[x][y] == tile and board[x][y+1] == tile and board[x][y+2] == tile and board[x][y+3] == tile:#Checks if there is 4 concecutive same colour tiles in a coloumn by using y value in board height loop-MC
+                return True#There is a winner-MC
     # check / diagonal spaces
     for x in range(BOARDWIDTH - 3):
         for y in range(3, BOARDHEIGHT):
-            if board[x][y] == tile and board[x+1][y-1] == tile and board[x+2][y-2] == tile and board[x+3][y-3] == tile:
-                return True
+            if board[x][y] == tile and board[x+1][y-1] == tile and board[x+2][y-2] == tile and board[x+3][y-3] == tile:#Checks of there is 4 concecutive same colour tiles in a bottom left to top right direction-MC
+                return True#There is a winner-MC
     # check \ diagonal spaces
     for x in range(BOARDWIDTH - 3):
         for y in range(BOARDHEIGHT - 3):
-            if board[x][y] == tile and board[x+1][y+1] == tile and board[x+2][y+2] == tile and board[x+3][y+3] == tile:
-                return True
-    return False
+            if board[x][y] == tile and board[x+1][y+1] == tile and board[x+2][y+2] == tile and board[x+3][y+3] == tile:#Checks if there is 4 concecutive same colour tiles in a top left to bottom right direction-MC
+                return True#There is a winner-MC
+    return False#No-one has won the game yet-MC
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == '__main__': #If the main fucntion is called, play the game-MC
+    main()#The main code for the game-MC
 
-#will this show up? hehe-MC
