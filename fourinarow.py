@@ -1,6 +1,6 @@
 # Four-In-A-Row, by Al Sweigart al@inventwithpython.com
 # (Pygame) Play against the computer, dropping tiles to connect four.
-#test!!!!!!!!! -MC
+#test #2!!!!!!!!! -MC
 #test -JS
 
 #hello-ST
@@ -323,25 +323,25 @@ def getComputerMove(board):
     # find all potential moves that have this best fitness
     bestMoves = []
     for i in range(len(potentialMoves)):
-        if potentialMoves[i] == bestMoveFitness and isValidMove(board, i):
+        if potentialMoves[i] == bestMoveFitness and isValidMove(board, i): #checks if each of the potiential moves would be a best move and adds to a list-MC
             bestMoves.append(i)
-    return random.choice(bestMoves)
+    return random.choice(bestMoves) #chooses randomly from the list of best moves-MC
 
 
 def getPotentialMoves(board, tile, lookAhead):
-    if lookAhead == 0 or isBoardFull(board):
-        return [0] * BOARDWIDTH
+    if lookAhead == 0 or isBoardFull(board): #lookahead is the the input of difficulty, so this if statement is if difficulty is 0 or the board is full-MC
+        return [0] * BOARDWIDTH #This means no potiential moves-MC
 
-    if tile == RED:
+    if tile == RED: #If the player is red, the computer is black-MC
         enemyTile = BLACK
     else:
-        enemyTile = RED
+        enemyTile = RED #If the player is black, the computer is red-MC
 
     # Figure out the best move to make.
     potentialMoves = [0] * BOARDWIDTH
-    for firstMove in range(BOARDWIDTH):
-        dupeBoard = copy.deepcopy(board)
-        if not isValidMove(dupeBoard, firstMove):
+    for firstMove in range(BOARDWIDTH): #Only having the potiential to make a move in the range of thee boardwidth-MC
+        dupeBoard = copy.deepcopy(board) #Copy the board-MC
+        if not isValidMove(dupeBoard, firstMove): #
             continue
         makeMove(dupeBoard, tile, firstMove)
         if isWinner(dupeBoard, tile):
