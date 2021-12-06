@@ -10,7 +10,7 @@ BOARDWIDTH = 7  # how many spaces wide the board is
 BOARDHEIGHT = 6 # how many spaces tall the board is
 assert BOARDWIDTH >= 4 and BOARDHEIGHT >= 4, 'Board must be at least 4x4.'
 
-DIFFICULTY = 2 # how many moves to look ahead. (>2 is usually too much)
+DIFFICULTY = 1# how many moves to look ahead. (>2 is usually too much)
 
 SPACESIZE = 50 # size of the tokens and individual board spaces in pixels
 
@@ -21,10 +21,10 @@ WINDOWHEIGHT = 480 # height in pixels
 XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * SPACESIZE) / 2)
 YMARGIN = int((WINDOWHEIGHT - BOARDHEIGHT * SPACESIZE) / 2)
 
-BRIGHTBLUE = (0, 50, 255)
+BRIGHTPINK=(225,100,180)
 WHITE = (255, 255, 255)
 
-BGCOLOR = BRIGHTBLUE
+BGCOLOR = BRIGHTPINK
 TEXTCOLOR = WHITE
 
 RED = 'red'
