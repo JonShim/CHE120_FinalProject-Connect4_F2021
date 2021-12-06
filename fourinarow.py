@@ -24,9 +24,12 @@ YMARGIN = int((WINDOWHEIGHT - BOARDHEIGHT * SPACESIZE) / 2)
 
 BRIGHTBLUE = (0, 50, 255)
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0) #new color for buttons, can be changed later -JS
 
 BGCOLOR = BRIGHTBLUE
 TEXTCOLOR = WHITE
+MENUCOLOR = BRIGHTBLUE #Temporary menu color value, can be changed later -JS
+BUTTONCOLOR = BLACK #temporary button color - JS
 
 RED = 'red'
 BLACK = 'black'
@@ -71,7 +74,12 @@ def main():
         runGame(isFirstGame)
         isFirstGame = False
 
+"""
+def menu():
+    
 
+#Menu function -JS
+"""
 def runGame(isFirstGame):
     if isFirstGame:
         # Let the computer go first on the first game, so the player
