@@ -166,6 +166,14 @@ def menu(isMenu):
 
 
 
+
+#Menu function -JS
+"""
+#loading and playing a sound effect-ST
+soundObj = pygame.mixer.Sound(Loyalty-Freak-Music-Carol-of-the-Internet.mp3)
+soundObj = pygame.mixer.music.play(-1, 0.0)
+soundObj.stop()
+""" #commented out since code broke from this -JS
 #function that runs the first game that shows how to play-ST
 
 def runGame(isFirstGame):
