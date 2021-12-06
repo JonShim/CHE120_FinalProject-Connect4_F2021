@@ -4,6 +4,7 @@
 #test -JS
 
 #hello-ST
+#adding data produced by other applications-ST
 import random, copy, sys, pygame
 from pygame.locals import *
 
@@ -19,35 +20,46 @@ FPS = 30 # frames per second to update the screen
 WINDOWWIDTH = 640 # width of the program's window, in pixels
 WINDOWHEIGHT = 480 # height in pixels
 
+# making sure the game is centered-ST
 XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * SPACESIZE) / 2)
 YMARGIN = int((WINDOWHEIGHT - BOARDHEIGHT * SPACESIZE) / 2)
 
+#colour and dimensions-ST
 BRIGHTBLUE = (0, 50, 255)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0) #new color for buttons, can be changed later -JS
 
+#background and textcolour-ST
 BGCOLOR = BRIGHTBLUE
 TEXTCOLOR = WHITE
 MENUCOLOR = BRIGHTBLUE #Temporary menu color value, can be changed later -JS
 BUTTONCOLOR = BLACK #temporary button color - JS
 
+#colour of tokens and program knowledge of whether a spot is empty or filled by each player-ST
 RED = 'red'
 BLACK = 'black'
 EMPTY = None
 HUMAN = 'human'
 COMPUTER = 'computer'
 
-
+#main function that sets up the layout of the game-ST
 def main():
+    #declaring global variables-ST
     global FPSCLOCK, DISPLAYSURF, REDPILERECT, BLACKPILERECT, REDTOKENIMG
     global BLACKTOKENIMG, BOARDIMG, ARROWIMG, ARROWRECT, HUMANWINNERIMG
     global COMPUTERWINNERIMG, WINNERRECT, TIEWINNERIMG
 
+    #setting up initial factors-ST
     pygame.init()
+    #example setting up a time function-ST
     FPSCLOCK = pygame.time.Clock()
+    #setting up display-ST
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Four in a Row')
-
+    
+    #setting up display of the game-ST
+    #importing images-ST
+    #scaling surfaces to an arbitrary size smoothly-ST
     REDPILERECT = pygame.Rect(int(SPACESIZE / 2), WINDOWHEIGHT - int(3 * SPACESIZE / 2), SPACESIZE, SPACESIZE)
     BLACKPILERECT = pygame.Rect(WINDOWWIDTH - int(3 * SPACESIZE / 2), WINDOWHEIGHT - int(3 * SPACESIZE / 2), SPACESIZE, SPACESIZE)
     REDTOKENIMG = pygame.image.load('4row_red.png')
@@ -57,6 +69,7 @@ def main():
     BOARDIMG = pygame.image.load('4row_board.png')
     BOARDIMG = pygame.transform.smoothscale(BOARDIMG, (SPACESIZE, SPACESIZE))
 
+    #importing images for human and player's status at the end of game
     HUMANWINNERIMG = pygame.image.load('4row_humanwinner.png')
     COMPUTERWINNERIMG = pygame.image.load('4row_computerwinner.png')
     TIEWINNERIMG = pygame.image.load('4row_tie.png')
@@ -69,17 +82,21 @@ def main():
     ARROWRECT.centery = REDPILERECT.centery
 
     isFirstGame = True
-
+    #while loop for running the game-ST
     while True:
         runGame(isFirstGame)
         isFirstGame = False
 
+<<<<<<< HEAD
 """
 def menu():
     
 
 #Menu function -JS
 """
+=======
+#function that runs the first game that shows how to play-ST
+>>>>>>> 29d11586df3ff31c7072197e22f4c13b1eb8fc52
 def runGame(isFirstGame):
     if isFirstGame:
         # Let the computer go first on the first game, so the player
@@ -96,14 +113,16 @@ def runGame(isFirstGame):
 
     # Set up a blank board data structure.
     mainBoard = getNewBoard()
-
+#loop for what the human player can do on their turn-ST
     while True: # main game loop
         if turn == HUMAN:
             # Human player's turn.
             getHumanMove(mainBoard, showHelp)
+            #if human player presses show help-ST
             if showHelp:
                 # turn off help arrow after the first move
                 showHelp = False
+            #if human player wins-ST
             if isWinner(mainBoard, RED):
                 winnerImg = HUMANWINNERIMG
                 break
@@ -122,7 +141,6 @@ def runGame(isFirstGame):
             # A completely filled board means it's a tie.
             winnerImg = TIEWINNERIMG
             break
-
     while True:
         # Keep looping until player clicks the mouse or quits.
         drawBoard(mainBoard)
