@@ -28,12 +28,16 @@ YMARGIN = int((WINDOWHEIGHT - BOARDHEIGHT * SPACESIZE) / 2)
 BRIGHTBLUE = (0, 50, 255)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0) #new color for buttons, can be changed later -JS
+GREEN = (0, 255, 0) #other button colors
+RED = (255, 0, 0) #other button colors
 
 #background and textcolour-ST
 BGCOLOR = BRIGHTBLUE
+TITLECOLOR = BLACK
 TEXTCOLOR = WHITE
 MENUCOLOR = BRIGHTBLUE #Temporary menu color value, can be changed later -JS
 BUTTONCOLOR = BLACK #temporary button color - JS
+BUTTONCOLOR_HIGHLIGHTED = GREEN #another temporary button color
 
 #colour of tokens and program knowledge of whether a spot is empty or filled by each player-ST
 RED = 'red'
@@ -82,21 +86,88 @@ def main():
     ARROWRECT.centery = REDPILERECT.centery
 
     isFirstGame = True
+    isMenu = True #menu state variable, initialize the game in the menu -JS
     #while loop for running the game-ST
     while True:
+        menu(isMenu) #call menu by default and loop to it after running each game -JS
         runGame(isFirstGame)
         isFirstGame = False
 
-<<<<<<< HEAD
-"""
-def menu():
-    
+def text_objects(text, font, color):
+    #text rendering helper function made by JS
+    textSurface = font.render(text, True, color)
+    return textSurface, textSurface.get_rect()
 
-#Menu function -JS
-"""
-=======
+def menu(isMenu):
+    '''
+    -display surface
+    -colors
+    -buttons: play, exit
+
+    Function by JS
+    '''
+    #Menu function -JS
+    while isMenu:
+        for event in pygame.event.get(): # event handling loop
+            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
+                pygame.quit()
+                sys.exit()
+
+        #Render the display for the menu and the title text
+        DISPLAYSURF.fill(BGCOLOR)
+        titleFont = pygame.font.Font('freesansbold.ttf', int(WINDOWWIDTH/10))
+        TextSurf, TextRect = text_objects("CONNECT 4", titleFont, TITLECOLOR)
+        TextRect.center = ((WINDOWWIDTH /2), ((WINDOWHEIGHT / 2) - (WINDOWHEIGHT / 6))) #title
+        DISPLAYSURF.blit(TextSurf, TextRect)
+
+        #Get the mouse coordinates to make buttons interactive
+        mouse = pygame.mouse.get_pos()
+        
+        #Get the mouse click to enable the game to run or exit
+        click = pygame.mouse.get_pressed()
+        
+        #play button
+        if ((WINDOWWIDTH/4) + (WINDOWWIDTH/2)) > mouse[0] > (WINDOWWIDTH/4) and ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/6)) > mouse[1] > (WINDOWHEIGHT/2) :
+            pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR_HIGHLIGHTED, ((WINDOWWIDTH/4), (WINDOWHEIGHT/2), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))                                                                    
+            #if mouse over the play button, color it with the highlight color
+            if click[0] == 1:
+                #print("CLICK")
+                isMenu == False
+                break
+                
+        else:
+            pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR, ((WINDOWWIDTH/4), (WINDOWHEIGHT/2), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))
+        
+        #exit button
+        if ((WINDOWWIDTH/4) + (WINDOWWIDTH/2)) > mouse[0] > (WINDOWWIDTH/4) and ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4) + (WINDOWHEIGHT/6)) > mouse[1] > ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4)):
+            pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR_HIGHLIGHTED, ((WINDOWWIDTH/4), ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4)), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))
+            if click[0] == 1:
+                pygame.quit()
+                sys.exit()
+        else:
+            pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR, ((WINDOWWIDTH/4), ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4)), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))
+
+        #settings button? If included, need to resize other buttons+title/display as well
+
+        #button text:
+        
+        buttonFont = pygame.font.Font('freesansbold.ttf', int(WINDOWWIDTH/20))
+
+        playTextSurf, playTextRect = text_objects("PLAY", buttonFont, TEXTCOLOR)
+        playTextRect.center = (( (WINDOWWIDTH/4) + ((WINDOWWIDTH/2)/2)), ((WINDOWHEIGHT/2) + ((WINDOWHEIGHT/6)/2)))
+        DISPLAYSURF.blit(playTextSurf, playTextRect)
+
+        exitTextSurf, exitTextRect = text_objects("EXIT", buttonFont, TEXTCOLOR)
+        exitTextRect.center = (( (WINDOWWIDTH/4) + ((WINDOWWIDTH/2)/2)), ((WINDOWHEIGHT/2) +(WINDOWHEIGHT/4) + ((WINDOWHEIGHT/6)/2)))
+        DISPLAYSURF.blit(exitTextSurf, exitTextRect)
+
+        pygame.display.update()
+        
+
+
+
 #function that runs the first game that shows how to play-ST
->>>>>>> 29d11586df3ff31c7072197e22f4c13b1eb8fc52
+
 def runGame(isFirstGame):
     if isFirstGame:
         # Let the computer go first on the first game, so the player
