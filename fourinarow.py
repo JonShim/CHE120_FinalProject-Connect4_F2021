@@ -106,9 +106,11 @@ def runGame(isFirstGame):
         if turn == HUMAN:
             # Human player's turn.
             getHumanMove(mainBoard, showHelp)
+            #if human player presses show help-ST
             if showHelp:
                 # turn off help arrow after the first move
                 showHelp = False
+            #if human player wins-ST
             if isWinner(mainBoard, RED):
                 winnerImg = HUMANWINNERIMG
                 break
