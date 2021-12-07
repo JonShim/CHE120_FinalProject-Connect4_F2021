@@ -1,8 +1,6 @@
 # Four-In-A-Row, by Al Sweigart al@inventwithpython.com
 # (Pygame) Play against the computer, dropping tiles to connect four.
-#test -JS
 
-#hello-ST
 #adding data produced by other applications-ST
 import random, copy, sys, pygame
 from pygame.locals import *
@@ -51,9 +49,13 @@ COMPUTER = 'computer'
 #main function that sets up the layout of the game-ST
 def main():
     #declaring global variables-ST
-    global FPSCLOCK, DISPLAYSURF, REDPILERECT, BLACKPILERECT, REDTOKENIMG
-    global BLACKTOKENIMG, BOARDIMG, ARROWIMG, ARROWRECT, HUMANWINNERIMG
-    global COMPUTERWINNERIMG, WINNERRECT, TIEWINNERIMG
+    #layout of global variables reorganized by JS
+    global FPSCLOCK, DISPLAYSURF
+    global REDPILERECT, REDTOKENIMG, BLACKPILERECT, BLACKTOKENIMG
+    global BOARDIMG, ARROWIMG, ARROWRECT, WINNERRECT
+    global HUMANWINNERIMG, HUMANWINNERRECT
+    global COMPUTERWINNERIMG, COMPUTERWINNERRECT
+    global TIEWINNERIMG, TIEWINNERRECT
 
     #setting up initial factors-ST
     pygame.init()
@@ -84,9 +86,14 @@ def main():
     HUMANWINNERIMG = pygame.image.load('4row_humanwinner.png')
     COMPUTERWINNERIMG = pygame.image.load('4row_computerwinner.png')
     TIEWINNERIMG = pygame.image.load('4row_tie.png')
-    WINNERRECT = COMPUTERWINNERIMG.get_rect() 
-    WINNERRECT.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2))
-    
+
+    #initialize the rect structures for the game-end images so that they are all centered -JS
+    COMPUTERWINNERRECT = COMPUTERWINNERIMG.get_rect()
+    COMPUTERWINNERRECT.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2))
+    HUMANWINNERRECT = HUMANWINNERIMG.get_rect() 
+    HUMANWINNERRECT.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2))
+    TIEWINNERRECT = TIEWINNERIMG.get_rect()
+    TIEWINNERRECT.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2))
 
     ARROWIMG = pygame.image.load('4row_arrow.png')
     ARROWRECT = ARROWIMG.get_rect()
@@ -109,13 +116,11 @@ def text_objects(text, font, color):
 
 def menu(isMenu):
     '''
-    -display surface
-    -colors
-    -buttons: play, exit
-
     Function by JS
+    This function draws the interactive menu screen that is shown when you run the game and after each game.
+    There are two buttons, a play button and an exit button. Mousing over the buttons changes their color.
+    The function takes a boolean parameter to determine whether or not to keep displaying the menu; it is turned off when the actual game is running
     '''
-    #Menu function -JS
     while isMenu:
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
@@ -140,43 +145,36 @@ def menu(isMenu):
             pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR_HIGHLIGHTED, ((WINDOWWIDTH/4), (WINDOWHEIGHT/2), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))                                                                    
             #if mouse over the play button, color it with the highlight color
             if click[0] == 1:
-                #print("CLICK")
+                #on click, exit this loop and play the game
                 isMenu == False
-                break
-                
+                break       
         else:
             pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR, ((WINDOWWIDTH/4), (WINDOWHEIGHT/2), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))
         
         #exit button
         if ((WINDOWWIDTH/4) + (WINDOWWIDTH/2)) > mouse[0] > (WINDOWWIDTH/4) and ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4) + (WINDOWHEIGHT/6)) > mouse[1] > ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4)):
             pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR_HIGHLIGHTED, ((WINDOWWIDTH/4), ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4)), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))
+            #if mouse over the exit button, color it with the highlight color
             if click[0] == 1:
+                #on click, exit the game
                 pygame.quit()
                 sys.exit()
         else:
             pygame.draw.rect(DISPLAYSURF, BUTTONCOLOR, ((WINDOWWIDTH/4), ((WINDOWHEIGHT/2) + (WINDOWHEIGHT/4)), (WINDOWWIDTH/2), (WINDOWHEIGHT/6)))
 
-        #settings button? If included, need to resize other buttons+title/display as well
-
         #button text:
-        
         buttonFont = pygame.font.Font('freesansbold.ttf', int(WINDOWWIDTH/20))
-
+        #draw the text for the Play button
         playTextSurf, playTextRect = text_objects("PLAY", buttonFont, TEXTCOLOR)
         playTextRect.center = (( (WINDOWWIDTH/4) + ((WINDOWWIDTH/2)/2)), ((WINDOWHEIGHT/2) + ((WINDOWHEIGHT/6)/2)))
         DISPLAYSURF.blit(playTextSurf, playTextRect)
-
+        #draw the text for the Exit button
         exitTextSurf, exitTextRect = text_objects("EXIT", buttonFont, TEXTCOLOR)
         exitTextRect.center = (( (WINDOWWIDTH/4) + ((WINDOWWIDTH/2)/2)), ((WINDOWHEIGHT/2) +(WINDOWHEIGHT/4) + ((WINDOWHEIGHT/6)/2)))
         DISPLAYSURF.blit(exitTextSurf, exitTextRect)
 
         pygame.display.update()
-        
-
-
-
-
-#Menu function -JS
+    
 
 def runGame(isFirstGame):
     if isFirstGame:
@@ -206,6 +204,7 @@ def runGame(isFirstGame):
             #if human player wins-ST
             if isWinner(mainBoard, RED):
                 winnerImg = HUMANWINNERIMG
+                WINNERRECT = HUMANWINNERRECT #added by JS for centering purposes
                 break
             turn = COMPUTER # switch to other player's turn
         else:
@@ -215,12 +214,14 @@ def runGame(isFirstGame):
             makeMove(mainBoard, BLACK, column)
             if isWinner(mainBoard, BLACK):
                 winnerImg = COMPUTERWINNERIMG
+                WINNERRECT = COMPUTERWINNERRECT #added by JS for centering purposes
                 break
             turn = HUMAN # switch to other player's turn
 
         if isBoardFull(mainBoard):
             # A completely filled board means it's a tie.
             winnerImg = TIEWINNERIMG
+            WINNERRECT = TIEWINNERRECT #added by JS for centering purposes
             break
     while True:
         # Keep looping until player clicks the mouse or quits.
@@ -234,7 +235,7 @@ def runGame(isFirstGame):
                 sys.exit()
             elif event.type == MOUSEBUTTONUP:
                 return
-#note: next section starts here -JS
+
 
 def makeMove(board, player, column):
     """
@@ -418,7 +419,6 @@ def animateComputerMoving(board, column):
     #this uses the helper function above -JS
     animateDroppingToken(board, column, BLACK)
 
-#note: next section starts here - JS
 
 def getComputerMove(board):
     '''This function excutes the potental moves the computer can make, checks if they are valid moves, checks which moves would be the best, and then
