@@ -1,5 +1,7 @@
 # Four-In-A-Row, by Al Sweigart al@inventwithpython.com
 # (Pygame) Play against the computer, dropping tiles to connect four.
+#
+#Base code for the menu function from https://pythonprogramming.net/pygame-start-menu-tutorial/  -JS
 
 #adding data produced by other applications-ST
 import random, copy, sys, pygame
