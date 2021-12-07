@@ -15,21 +15,21 @@ DIFFICULTY = 1# how many moves to look ahead. (>2 is usually too much)
 
 SPACESIZE = 50 # size of the tokens and individual board spaces in pixels
 
-FPS = 30 # frames per second to update the screen
-WINDOWWIDTH = 640 # width of the program's window, in pixels
-WINDOWHEIGHT = 480 # height in pixels
+FPS = 30            # frames per second to update the screen
+WINDOWWIDTH = 640   # width of the program's window, in pixels
+WINDOWHEIGHT = 480  # height in pixels
 
 # making sure the game is centered-ST
 XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * SPACESIZE) / 2)
 YMARGIN = int((WINDOWHEIGHT - BOARDHEIGHT * SPACESIZE) / 2)
 
 #colour and dimensions-ST
-LIGHTORANGE=(225,150,55) #Backgorund colour is orange now, not blue-MC
-ORANGE=(225,75,25) #Menu colour-MC
+LIGHTORANGE=(225,150,55)    #Backgorund colour is orange now, not blue-MC
+ORANGE=(225,75,25)          #Menu colour-MC
 WHITE = (255, 255, 255)
-BLACK = (0, 0, 0) #new color for buttons, can be changed later -JS
-PURPLE = (100, 0, 255) #other button colors
-RED = (255, 0, 0) #other button colors
+BLACK = (0, 0, 0)           #new color for buttons, can be changed later -JS
+PURPLE = (100, 0, 255)      #other button colors
+RED = (255, 0, 0)           #other button colors
 
 
 #background and textcolour-ST
@@ -37,7 +37,7 @@ BGCOLOR = LIGHTORANGE
 TITLECOLOR = BLACK
 
 TEXTCOLOR = WHITE
-MENUCOLOR = ORANGE #Temporary menu color value, can be changed later -JS
+MENUCOLOR = ORANGE  #Temporary menu color value, can be changed later -JS
 BUTTONCOLOR = BLACK #temporary button color - JS
 BUTTONCOLOR_HIGHLIGHTED = PURPLE #another temporary button color
 
@@ -64,8 +64,8 @@ def main():
     pygame.display.set_caption('Four in a Row')
     
     #loading and playing background music-ST
-    pygame.mixer.init()#initializing mixer from pygame-MC
-    soundObj = pygame.mixer.music.load('music.mp3') #loading the music file-MC
+    pygame.mixer.init()                                 #initializing mixer from pygame-MC
+    soundObj = pygame.mixer.music.load('music.mp3')     #loading the music file-MC
     soundObj = pygame.mixer.music.play(-1, 0.0) 
     
     #setting up display of the game-ST
@@ -100,7 +100,8 @@ def main():
         menu(isMenu) #call menu by default and loop to it after running each game -JS
         runGame(isFirstGame)
         isFirstGame = False
-    soundObj.stop()#Stopping the game music when you exit the code
+        
+    soundObj.stop()     #Stopping the game music when you exit the code
 
 def text_objects(text, font, color):
     #text rendering helper function made by JS
@@ -430,19 +431,19 @@ def getComputerMove(board):
         if potentialMoves[i] > bestMoveFitness and isValidMove(board, i):
             bestMoveFitness = potentialMoves[i]
     # find all potential moves that have this best fitness
-    bestMoves = [] #initializes the best moves list-MC
+    bestMoves = []  #initializes the best moves list-MC
     for i in range(len(potentialMoves)):#loop that will repeat for each potential move given-MC
         if potentialMoves[i] == bestMoveFitness and isValidMove(board, i): #checks if each of the potiential moves would be a best move and adds to a list-MC
-            bestMoves.append(i)#adds each best move to the list during each loop-MC
-    return random.choice(bestMoves) #chooses randomly from the list of best moves-MC
+            bestMoves.append(i)         #adds each best move to the list during each loop-MC
+    return random.choice(bestMoves)     #chooses randomly from the list of best moves-MC
 
 
 def getPotentialMoves(board, tile, lookAhead):
     '''This function gives the potiential moves that the computer can make based on the difficulty and board status-MC'''
     if lookAhead == 0 or isBoardFull(board): #lookahead is the the input of difficulty, so this if statement is if difficulty is 0 or the board is full-MC
-        return [0] * BOARDWIDTH #This means no potiential moves-MC
+        return [0] * BOARDWIDTH  #This means no potiential moves-MC
 
-    if tile == RED: #If the player is red, the computer is black-MC
+    if tile == RED:     #If the player is red, the computer is black-MC
         enemyTile = BLACK
     else:
         enemyTile = RED #If the player is black, the computer is red-MC
@@ -463,8 +464,8 @@ def getPotentialMoves(board, tile, lookAhead):
             if isBoardFull(dupeBoard):#if the board is full, potential moves=0 -MC
                 potentialMoves[firstMove] = 0
             else: #If the board is not full -MC
-                for counterMove in range(BOARDWIDTH): #Looks at the possible moves that are in the range of the board width-MC
-                    dupeBoard2 = copy.deepcopy(dupeBoard)#Copy board again-MC
+                for counterMove in range(BOARDWIDTH):            #Looks at the possible moves that are in the range of the board width-MC
+                    dupeBoard2 = copy.deepcopy(dupeBoard)        #Copy board again-MC
                     if not isValidMove(dupeBoard2, counterMove): #If the move is not valid, calculate more moves.-MC
                         continue
                     makeMove(dupeBoard2, enemyTile, counterMove)#
@@ -492,44 +493,44 @@ def isValidMove(board, column):
     # Returns True if there is an empty space in the given column.
     # Otherwise returns False.
     if column < 0 or column >= (BOARDWIDTH) or board[column][0] != EMPTY:
-        return False #Move is not valid-MC
-    return True#Move is valid-MC
+        return False    #Move is not valid-MC
+    return True         #Move is valid-MC
 
 
 def isBoardFull(board):
     # Returns True if there are no empty spaces anywhere on the board.
-    for x in range(BOARDWIDTH):#A for loop to check every row-MC
-        for y in range(BOARDHEIGHT):#A for loop to check each space in each row from the previous loop-MC
-            if board[x][y] == EMPTY:#If any spaces are empty, then the board is not full.-MC
-                return False#Board is not full-MC
-    return True#Board is full-MC
+    for x in range(BOARDWIDTH):         #A for loop to check every row-MC
+        for y in range(BOARDHEIGHT):    #A for loop to check each space in each row from the previous loop-MC
+            if board[x][y] == EMPTY:    #If any spaces are empty, then the board is not full.-MC
+                return False            #Board is not full-MC
+    return True                         #Board is full-MC
 
 
 def isWinner(board, tile):
     '''This function checks if the computer or human has won the game-MC'''
     # check horizontal spaces
-    for x in range(BOARDWIDTH - 3):#Board width is 7, so you need to check a range of 4 (7-3 is 4)-MC
-        for y in range(BOARDHEIGHT):#Needs to be in range of board height as well-MC
+    for x in range(BOARDWIDTH - 3):     #Board width is 7, so you need to check a range of 4 (7-3 is 4)-MC
+        for y in range(BOARDHEIGHT):    #Needs to be in range of board height as well-MC
             if board[x][y] == tile and board[x+1][y] == tile and board[x+2][y] == tile and board[x+3][y] == tile:#If there is 4 concecutive same colour tiles in a row by using x value in board width loop-MC
-                return True#There is a winner-MC
+                return True             #There is a winner-MC
     # check vertical spaces
-    for x in range(BOARDWIDTH):#Needs to be in range of board width-MC
+    for x in range(BOARDWIDTH):         #Needs to be in range of board width-MC
         for y in range(BOARDHEIGHT - 3):
             if board[x][y] == tile and board[x][y+1] == tile and board[x][y+2] == tile and board[x][y+3] == tile:#Checks if there is 4 concecutive same colour tiles in a coloumn by using y value in board height loop-MC
-                return True#There is a winner-MC
+                return True             #There is a winner-MC
     # check / diagonal spaces
     for x in range(BOARDWIDTH - 3):
         for y in range(3, BOARDHEIGHT):
             if board[x][y] == tile and board[x+1][y-1] == tile and board[x+2][y-2] == tile and board[x+3][y-3] == tile:#Checks of there is 4 concecutive same colour tiles in a bottom left to top right direction-MC
-                return True#There is a winner-MC
+                return True             #There is a winner-MC
     # check \ diagonal spaces
     for x in range(BOARDWIDTH - 3):
         for y in range(BOARDHEIGHT - 3):
             if board[x][y] == tile and board[x+1][y+1] == tile and board[x+2][y+2] == tile and board[x+3][y+3] == tile:#Checks if there is 4 concecutive same colour tiles in a top left to bottom right direction-MC
-                return True#There is a winner-MC
-    return False#No-one has won the game yet-MC
+                return True             #There is a winner-MC
+    return False                        #No-one has won the game yet-MC
 
 
 if __name__ == '__main__': #If the main fucntion is called, play the game-MC
-    main()#The main code for the game-MC
+    main()                 #The main code for the game-MC
 
