@@ -6,8 +6,8 @@
 import random, copy, sys, pygame
 from pygame.locals import *
 
-BOARDWIDTH = 6  # how many spaces wide the board is
-BOARDHEIGHT = 7 # how many spaces tall the board is
+BOARDWIDTH = 7  # how many spaces wide the board is
+BOARDHEIGHT = 6 # how many spaces tall the board is
 assert BOARDWIDTH >= 4 and BOARDHEIGHT >= 4, 'Board must be at least 4x4.'
 
 DIFFICULTY = 2 # how many moves to look ahead. (>2 is usually too much)
